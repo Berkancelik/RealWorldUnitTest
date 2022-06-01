@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace RealWorldUnitTest.Web.Repository
 {
-    public class Reposityory<TEntity> : IRepository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
 
         private readonly UnitTestDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
 
-        public Reposityory(UnitTestDbContext context)
+        public Repository(UnitTestDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
