@@ -34,9 +34,10 @@ namespace RealWorldUnitTest.Web.Repository
             return await _dbSet.ToListAsync();
         }
 
-        public Task<TEntity> GetById(int id)
+        public async Task<TEntity> GetById(int id)
         {
-            throw new System.NotImplementedException();
+            return await _dbSet.FindAsync(id);
+
         }
 
         public void Update(TEntity entity)

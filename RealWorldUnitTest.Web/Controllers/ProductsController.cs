@@ -129,11 +129,23 @@ namespace RealWorldUnitTest.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _repository.GetById((int)id);
-
+            _repository.Delete(product);
 
             return RedirectToAction(nameof(Index));
         }
 
+        private bool ProductExists(int id)
+        {
+            var product = _repository.GetById(id).Result;
 
+            if (product == null)
+            
+                return false;
+            
+            else
+            
+                return true;
+            
+        }
     }
 }
