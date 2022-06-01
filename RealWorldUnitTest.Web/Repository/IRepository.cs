@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RealWorldUnitTest.Web.Repository
 {
@@ -6,9 +7,8 @@ namespace RealWorldUnitTest.Web.Repository
     {
 
         Task<TEntity> GetById(int id);
-
+        Task<IEnumerable<TEntity>> GetAll();
         Task Create(TEntity entity);
-
         void Update(TEntity entity);
         void Delete(TEntity entity);
     }
