@@ -35,6 +35,7 @@ namespace RealWorldUnitTest.Test
             Assert.IsType<ViewResult>(result);
         }
 
+        [Fact]
         public async void Index_ActionExecutes_RetrunProductList()
         {
             _mockRepo.Setup(repo => repo.GetAll()).ReturnsAsync(products);
@@ -44,6 +45,18 @@ namespace RealWorldUnitTest.Test
 
             var productList = Assert.IsAssignableFrom<IEnumerable<Product>>(viewResult.Model);
             Assert.Equal<int>(2, productList.Count());
+        }
+
+        [Fact]
+
+        public async void Detail_IdUsNull_ReturnRedirectToIndexAction()
+        {
+            var result = await _controller.Details(null);
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index", redirect.ActionName);
+
         }
     }
 }

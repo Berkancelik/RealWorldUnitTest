@@ -33,15 +33,13 @@ namespace RealWorldUnitTest.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
-
             var product = await _repository.GetById((int)id);
             if (product == null)
             {
                 return NotFound();
             }
-
             return View(product);
         }
 
