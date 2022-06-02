@@ -65,7 +65,7 @@ namespace RealWorldUnitTest.Test
         public async void Details_InValid_ReturnsNotFound()
         {
             Product product = null;
-            _mockRepo.Setup(x=> x.GetById(0)).ReturnsAsync(product);
+            _mockRepo.Setup(x => x.GetById(0)).ReturnsAsync(product);
             var result = await _controller.Details(0);
             var redirect = Assert.IsType<NotFoundResult>(result);
             Assert.Equal<int>(404, redirect.StatusCode);
@@ -111,7 +111,7 @@ namespace RealWorldUnitTest.Test
             var result = await _controller.Create(products.First());
 
             var redirect = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index",redirect.ActionName);
+            Assert.Equal("Index", redirect.ActionName);
         }
 
 
@@ -124,7 +124,7 @@ namespace RealWorldUnitTest.Test
             var result = await _controller.Create(products.First());
 
             _mockRepo.Verify(repo => repo.Create(It.IsAny<Product>()), Times.Once);
-                
+
         }
 
         [Fact]
@@ -170,6 +170,17 @@ namespace RealWorldUnitTest.Test
             Assert.Equal(product.Id, resultProduct.Id);
             Assert.Equal(product.Name, resultProduct.Name);
         }
+
+        [Theory]
+        [InlineData(2)]
+        public void EditPOST_IdIsNotEqualProduct_ReturnNotFound(int productId)
+        {
+            var result = _controller.Edit(2, products.First(x => x.Id == productId));
+
+            var redirect = Assert.IsType<NotFoundResult>(result);
+        }
+
+        
 
     }
 }
