@@ -180,7 +180,17 @@ namespace RealWorldUnitTest.Test
             var redirect = Assert.IsType<NotFoundResult>(result);
         }
 
-        
+        [Theory]
+        [InlineData(1)]
+        public void EditPOST_InValidModelState_ReturnView(int prodcutId)
+        {
+            _controller.ModelState.AddModelError("Name", " ");
 
+            var result = _controller.Edit(prodcutId, products.First(x => x.Id == prodcutId));
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<Product>(viewResult.Model);
+        }
+
+       
     }
 }
