@@ -83,5 +83,12 @@ namespace RealWorldUnitTest.Test
             Assert.Equal(prodcut.Id, resultProduct.Id);
             Assert.Equal(prodcut.Name, resultProduct.Name);
         }
+        [Fact]
+        public void Create_ActionExecutes_RetunrView()
+        {
+            var result = _controller.Create();
+            Assert.IsType<ViewResult>(result);
+        }
+
     }
 }
