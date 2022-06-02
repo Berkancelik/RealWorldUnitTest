@@ -34,5 +34,16 @@ namespace RealWorldUnitTest.Test
             var result = await _controller.Index();
             Assert.IsType<ViewResult>(result);
         }
+
+        public async void Index_ActionExecutes_RetrunProductList()
+        {
+            _mockRepo.Setup(repo => repo.GetAll()).ReturnsAsync(products);
+            var result = await _controller.Index();
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            var productList = Assert.IsAssignableFrom<IEnumerable<Product>>(viewResult.Model);
+            Assert.Equal<int>(2, productList.Count());
+        }
     }
 }
