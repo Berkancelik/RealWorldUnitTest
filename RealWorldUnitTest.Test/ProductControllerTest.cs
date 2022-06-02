@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using RealWorldUnitTest.Web.Controllers;
 using RealWorldUnitTest.Web.Models;
 using RealWorldUnitTest.Web.Repository;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace RealWorldUnitTest.Test
 {
@@ -23,6 +25,14 @@ namespace RealWorldUnitTest.Test
             _controller = new ProductsController(_mockRepo.Object);
             products = new List<Product>() { new Product { Id = 1, Name = "Kalem", Price = 500, Stock = 54, Color = "Mavi" },
                 new Product { Id = 2, Name = "Defter", Price = 450, Stock = 22, Color = "Turuncu" } };
+        }
+
+
+        [Fact]
+        public async void Index_ActionExecutes_ReturnViews()
+        {
+            var result = await _controller.Index();
+            Assert.IsType<ViewResult>(result);
         }
     }
 }
