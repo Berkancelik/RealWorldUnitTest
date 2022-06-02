@@ -58,5 +58,16 @@ namespace RealWorldUnitTest.Test
             Assert.Equal("Index", redirect.ActionName);
 
         }
+
+        [Fact]
+        public async void Details_InValid_ReturnsNotFound()
+        {
+            Product product = null;
+            _mockRepo.Setup(x=> x.GetById(0)).ReturnsAsync(product);
+            _mockRepo.Setup(x=> x.GetById(0)).ReturnsAsync(product);
+            var result = await _controller.Details(0);
+            var redirect = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal<int>(404, redirect.StatusCode);
+        }
     }
 }
