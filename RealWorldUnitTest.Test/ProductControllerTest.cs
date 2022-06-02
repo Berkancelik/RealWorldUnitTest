@@ -64,10 +64,24 @@ namespace RealWorldUnitTest.Test
         {
             Product product = null;
             _mockRepo.Setup(x=> x.GetById(0)).ReturnsAsync(product);
-            _mockRepo.Setup(x=> x.GetById(0)).ReturnsAsync(product);
             var result = await _controller.Details(0);
             var redirect = Assert.IsType<NotFoundResult>(result);
             Assert.Equal<int>(404, redirect.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async void Details_ValidId_ReturnProduct(int productId)
+        {
+            Product prodcut = products.First(x => x.Id == productId);
+            _mockRepo.Setup(repo => repo.GetById(productId)).ReturnsAsync(prodcut);
+
+            var result = await _controller.Details(productId);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var resultProduct = Assert.IsAssignableFrom<Product>(viewResult.Model);
+
+            Assert.Equal(prodcut.Id, resultProduct.Id);
+            Assert.Equal(prodcut.Name, resultProduct.Name);
         }
     }
 }
