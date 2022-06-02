@@ -113,5 +113,20 @@ namespace RealWorldUnitTest.Test
             var redirect = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index",redirect.ActionName);
         }
+
+
+        [Fact]
+        public async void CreatePOST_ValidModelState_CreateMethodExecute()
+        {
+            Product newProduct = null;
+            _mockRepo.Setup(repo => repo.Create(It.IsAny<Product>())).Callback<Product>(x => newProduct = x);
+
+            var result = await _controller.Create(products.First());
+
+            _mockRepo.Verify(repo => repo.Create(It.IsAny<Product>()), Times.Once);
+                
+        }
+
+
     }
 }
