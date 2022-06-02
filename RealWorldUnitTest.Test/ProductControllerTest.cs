@@ -15,6 +15,8 @@ namespace RealWorldUnitTest.Test
 
     public class ProductControllerTest
     {
+        // eğer sadece model state geçerli ise index sayfasına dönüp dönmediğini test etmek için default olarak loose da bırakabiliriz
+        // eğer hiçbir şey belirtmez ise default'u loose dur. Yani gevşek bir şekilde testi sıkmamaktadır.
         private readonly Mock<IRepository<Product>> _mockRepo;
         private readonly ProductsController _controller;
         private List<Product> products;
@@ -90,5 +92,26 @@ namespace RealWorldUnitTest.Test
             Assert.IsType<ViewResult>(result);
         }
 
+        [Fact]
+        public async void Create_InValidModelState_ReturnView()
+        {
+            _controller.ModelState.AddModelError("Name", "Name alanı gereklidir");
+
+            var result = await _controller.Create(products.First());
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+
+            Assert.IsType<Product>(viewResult.Model);
+        }
+
+
+        [Fact]
+        public async void Create_ValidModelState_ReturnRediretctToIndexAction()
+        {
+            var result = await _controller.Create(products.First());
+
+            var redirect = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index",redirect.ActionName);
+        }
     }
 }
