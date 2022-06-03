@@ -241,5 +241,13 @@ namespace RealWorldUnitTest.Test
             var viewResult = Assert.IsType<ViewResult>(result); 
             Assert.IsAssignableFrom<Product>(viewResult.Model);
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async void DeleteConfirmed_ActionExecutes_ReturnRedirectToIndexAction(int productId)
+        {
+            var result = await _controller.DeleteConfirmed(productId);
+            Assert.IsType<RedirectToActionResult>(result);
+        }
     }
 }
