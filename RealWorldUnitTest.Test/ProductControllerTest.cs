@@ -208,8 +208,8 @@ namespace RealWorldUnitTest.Test
             var product = products.First(x => x.Id == productId);
             _mockRepo.Setup(repo => repo.Update(product));
 
-            _controller.Edit(productId,product);
-            _mockRepo.Verify(repo => repo.Update(It.IsAny<Product>()),Times.Once);
+            _controller.Edit(productId, product);
+            _mockRepo.Verify(repo => repo.Update(It.IsAny<Product>()), Times.Once);
         }
 
         [Fact]
@@ -218,7 +218,15 @@ namespace RealWorldUnitTest.Test
             var result = await _controller.Delete(null);
             Assert.IsType<NotFoundResult>(result);
         }
-     
 
+        [Theory]
+        [InlineData(0)]
+        public async void Delete_IdIsNotEqualProduct_ReturnNotFound(int productId)
+        {
+            Product product = null;
+            _mockRepo.Setup(x => x.GetById(productId)).ReturnsAsync(product);
+            var result = await _controller.Delete(productId);
+            Assert.IsType<RedirectToActionResult>(result);
+        }
     }
 }
