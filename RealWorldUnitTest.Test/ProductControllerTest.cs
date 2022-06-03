@@ -212,10 +212,13 @@ namespace RealWorldUnitTest.Test
             _mockRepo.Verify(repo => repo.Update(It.IsAny<Product>()),Times.Once);
         }
 
-
-
-
-
+        [Fact]
+        public async void Delete_IsNull_ReturnNotFound()
+        {
+            var result = await _controller.Delete(null);
+            Assert.IsType<NotFoundResult>(result);
+        }
+     
 
     }
 }
