@@ -103,5 +103,18 @@ namespace RealWorldUnitTest.Test
             var resultNotFound = await _controller.DeleteProduct(productId);
             Assert.IsType<NotFoundResult>(resultNotFound);
         }
+
+        [Theory]
+        [InlineData(1)]
+        public async void DeleteProduct_ActionExecute_ReturnNoContent(int prodcutId)
+        {
+            var product = products.First(x=> x.Id == prodcutId);
+            _mockRepo.Setup(x=>x.GetById(prodcutId)).ReturnsAsync(product);
+            _mockRepo.Setup(x => x.Delete(product));
+            var noContentResult = await _controller.DeleteProduct(prodcutId);
+            _mockRepo.Verify(x=>x.Delete(product),Times.Once);  
+            Assert.IsType<NoContentResult>(noContentResult);
+        }
+
     }
 }
