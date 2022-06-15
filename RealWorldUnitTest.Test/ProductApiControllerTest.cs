@@ -76,10 +76,20 @@ namespace RealWorldUnitTest.Test
         {
             var product = products.First(x => x.Id == productId);
             _mockRepo.Setup(x => x.Update(product));
-            var result = _controller.PutProduct(productId, product); 
-            _mockRepo.Verify(x=> x.Update(product),Times.Once);
+            var result = _controller.PutProduct(productId, product);
+            _mockRepo.Verify(x => x.Update(product), Times.Once);
             Assert.IsType<NoContentResult>(result);
+        }
 
+        [Fact]
+        public async void PostProduct_ActionExecutes_ReturnCreatedAction()
+        {
+            var product = products.First();
+            _mockRepo.Setup(x => x.Create(product)).Returns(Task.CompletedTask);
+            var result = await _controller.PostProduct(product);
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
+            _mockRepo.Verify(x=>x.Create(product), Times.Once);
+            Assert.Equal("GetProduct",createdAtActionResult .ActionName);
         }
     }
 }
