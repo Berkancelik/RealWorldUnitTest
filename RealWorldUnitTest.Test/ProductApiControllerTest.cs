@@ -88,8 +88,20 @@ namespace RealWorldUnitTest.Test
             _mockRepo.Setup(x => x.Create(product)).Returns(Task.CompletedTask);
             var result = await _controller.PostProduct(product);
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result);
-            _mockRepo.Verify(x=>x.Create(product), Times.Once);
-            Assert.Equal("GetProduct",createdAtActionResult .ActionName);
+            _mockRepo.Verify(x => x.Create(product), Times.Once);
+            Assert.Equal("GetProduct", createdAtActionResult.ActionName);
+        }
+
+
+
+        [Theory]
+        [InlineData(1)]
+        public async void DeleteProduct_IdInValid_ReturnNotFound(int productId)
+        {
+            Product product = null;
+            _mockRepo.Setup(x => x.GetById(productId)).ReturnsAsync(product);
+            var resultNotFound = await _controller.DeleteProduct(productId);
+            Assert.IsType<NotFoundResult>(resultNotFound);
         }
     }
 }
