@@ -51,7 +51,7 @@ namespace RealWorldUnitTest.Test
         [InlineData(2)]
         public async void GetProduct_IdValid_ReturnOkResult(int productId)
         {
-            var product =  products.First(x => x.Id == productId);
+            var product = products.First(x => x.Id == productId);
             _mockRepo.Setup(x => x.GetById(productId)).ReturnsAsync(product);
             var result = await _controller.GetProduct(productId);
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -67,7 +67,19 @@ namespace RealWorldUnitTest.Test
         {
             var product = products.First(x => x.Id == productId);
             var result = _controller.PutProduct(2, product);
-            var badRequestResult = Assert.IsType<BadRequestResult>(result);    
+            var badRequestResult = Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public void PutProduct_ActionExecutes_ReturnNoContent(int productId)
+        {
+            var product = products.First(x => x.Id == productId);
+            _mockRepo.Setup(x => x.Update(product));
+            var result = _controller.PutProduct(productId, product); 
+            _mockRepo.Verify(x=> x.Update(product),Times.Once);
+            Assert.IsType<NoContentResult>(result);
+
         }
     }
 }
