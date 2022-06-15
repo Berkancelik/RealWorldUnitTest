@@ -24,7 +24,7 @@ namespace RealWorldUnitTest.Web.Controllers
 
         // GET: api/ProductsApi
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProduct()
         {
             var product = await _repository.GetAll();
             return Ok(product);
