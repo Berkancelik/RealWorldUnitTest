@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using RealWorldUnitTest.Web.Controllers;
+using RealWorldUnitTest.Web.Helpers;
 using RealWorldUnitTest.Web.Models;
 using RealWorldUnitTest.Web.Repository;
 using System;
@@ -17,14 +18,24 @@ namespace RealWorldUnitTest.Test
         private readonly Mock<IRepository<Product>> _mockRepo;
         private readonly ProductsApiController _controller;
         private List<Product> products;
+        private readonly Helper _helper;
 
-        public ProductApiControllerTest()
+        public ProductApiControllerTest(Mock<IRepository<Product>> mockRepo, ProductsApiController controller, List<Product> products, Helper helper)
         {
-            _mockRepo = new Mock<IRepository<Product>>();
-            _controller = new ProductsApiController(_mockRepo.Object);
-            products = new List<Product>() { new Product { Id = 1, Name = "Kalem", Price = 500, Stock = 54, Color = "Mavi" },
-                new Product { Id = 2, Name = "Defter", Price = 450, Stock = 22, Color = "Turuncu" } };
+            _mockRepo = mockRepo;
+            _controller = controller;
+            this.products = products;
+            _helper = helper;
         }
+
+        [Theory]
+        [InlineData(4, 5, 9)]
+        public void Add_SampleBalues_ReturnTotal(int a, int b, int total)
+        {
+            var result = _helper.add(a, b);
+            Assert.Equal(total, result);
+        }
+
         [Fact]
         public async void GetProduct_ActionExecutes_RetrunOkResultWithProduct()
         {
@@ -108,11 +119,11 @@ namespace RealWorldUnitTest.Test
         [InlineData(1)]
         public async void DeleteProduct_ActionExecute_ReturnNoContent(int prodcutId)
         {
-            var product = products.First(x=> x.Id == prodcutId);
-            _mockRepo.Setup(x=>x.GetById(prodcutId)).ReturnsAsync(product);
+            var product = products.First(x => x.Id == prodcutId);
+            _mockRepo.Setup(x => x.GetById(prodcutId)).ReturnsAsync(product);
             _mockRepo.Setup(x => x.Delete(product));
             var noContentResult = await _controller.DeleteProduct(prodcutId);
-            _mockRepo.Verify(x=>x.Delete(product),Times.Once);  
+            _mockRepo.Verify(x => x.Delete(product), Times.Once);
             Assert.IsType<NoContentResult>(noContentResult);
         }
 
